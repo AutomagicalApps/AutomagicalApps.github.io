@@ -127,7 +127,7 @@ PDFAnnotate.prototype.enableAddText = function () {
 	}
 }
 
-PDFAnnotate.prototype.enableRectangle = function () {
+PDFAnnotate.prototype.enableRectangle = function (top,left,width,height) {
 	var inst = this;
 	var fabricObj = inst.fabricObjects[inst.active_canvas];
 	inst.active_tool = 4;
@@ -138,8 +138,10 @@ PDFAnnotate.prototype.enableRectangle = function () {
 	}
 
 	var rect = new fabric.Rect({
-		width: 100,
-		height: 100,
+		top: top,
+		left: left,
+		width: width,
+		height: height,
 		fill: inst.color,
 		stroke: inst.borderColor,
 		strokeSize: inst.borderSize
