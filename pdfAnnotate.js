@@ -140,6 +140,8 @@ PDFAnnotate.prototype.enableRectangle = function (top,left,width,height) {
 	var rect = new fabric.Rect({
 		top:top,
 		left:left,
+		originX: 'left',
+          	originY: 'top',
 		width: width,
 		height: height,
 		fill: inst.color,
