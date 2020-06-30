@@ -97,7 +97,6 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 	   if (inst.active_tool == 4) {
 		 function Rectangle(inst) {
 			
-			this.canvas = canvas;
 			this.className= 'Rectangle';
 			this.isDrawing = false;
 			this.bindEvents();
