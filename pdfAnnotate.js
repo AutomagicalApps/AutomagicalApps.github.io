@@ -6,7 +6,7 @@
 var PDFAnnotate = function(container_id, url, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
-	this.active_tool = 1; // 1 - Free hand, 2 - Text, 3 - Arrow, 4 - Rectangle
+	this.active_tool = 1; // 1 - Free hand, 2 - Text, 3 - Arrow, 1 - Rectangle
 	this.fabricObjects = [];
 	this.fabricObjectsData = [];
 	this.color = '#212121';
@@ -94,7 +94,7 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 	        fabricObj.add(text);
 	        inst.active_tool = 0;
 	    }
-	   if (inst.active_tool == 4) {
+	   if (inst.active_tool == 1) {
 		 function Rectangle(inst) {
 			
 			this.className= 'Rectangle';
