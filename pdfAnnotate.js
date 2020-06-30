@@ -329,7 +329,10 @@ PDFAnnotate.prototype.serializePdf = function() {
 	return JSON.stringify(inst.fabricObjects, null, 4);
 }
 
-
+PDFAnnotate.prototype.getFabricObjects = function() {
+	var inst = this;
+	return inst.fabricObjects;
+}
 
 PDFAnnotate.prototype.loadFromJSON = function(jsonData) {
 	var inst = this;
