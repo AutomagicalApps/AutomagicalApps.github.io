@@ -1,5 +1,6 @@
 /**
- * PDFAnnotate v1.0.0
+ * Inspired by PDFAnnotate v1.0.0
+ * Big thanks to Author!
  * Author: Ravisha Heshan
  */
 
