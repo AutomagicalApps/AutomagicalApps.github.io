@@ -79,6 +79,11 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 				fabricObj.off('after:render')
 			})
 		});
+		$(fabricObj.upperCanvasEl).on('mousedown',function (event) {
+	            inst.active_canvas = index;
+			console.log('mousedown in pdfAnnotate.js');
+			});
+		});
 	}
 
 	this.fabricClickHandler = function(event, fabricObj) {
@@ -96,6 +101,8 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 	    }
 		else{
 			console.log('inst.active_tool: '+inst.active_tool);
+			//I think we can put in the logic here to construct free draw rectangle
+			
 		}
 	}
 }
