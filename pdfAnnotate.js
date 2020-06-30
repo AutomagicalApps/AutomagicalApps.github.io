@@ -82,7 +82,6 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 		$(fabricObj.upperCanvasEl).on('mousedown',function (event) {
 	            inst.active_canvas = index;
 			console.log('mousedown in pdfAnnotate.js');
-			});
 		});
 	}
 
