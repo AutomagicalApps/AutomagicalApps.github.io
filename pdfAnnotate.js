@@ -7,7 +7,7 @@
 var PDFAnnotate = function(container_id, url, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
-	this.active_tool = 1; // 1 - Free hand, 2 - Text, 3 - Arrow, 1 - Rectangle
+	this.active_tool = 1; // 0 - Free hand, 1 - Rectangle, 2 - Text, 3 - Arrow, 
 	this.fabricObjects = [];
 	this.fabricObjectsData = [];
 	this.color = '#212121';
@@ -113,7 +113,7 @@ var Rectangle = (function () {
         this.bindEvents();
     }
 
-	 Rectangle.prototype.bindEvents = function() {
+Rectangle.prototype.bindEvents = function() {
     var inst = this;
     inst.canvas.on('mouse:down', function(o) {
       inst.onMouseDown(o);
@@ -143,8 +143,8 @@ var Rectangle = (function () {
       var activeObj = inst.canvas.getActiveObject();
 
       activeObj.stroke= 'red',
-      activeObj.strokeWidth= 5;
-      activeObj.fill = 'transparent';
+      activeObj.strokeWidth= 1;
+      activeObj.fill = 'rgba(255, 0, 0, 0.3)';
 
       if(origX > pointer.x){
           activeObj.set({ left: Math.abs(pointer.x) }); 
