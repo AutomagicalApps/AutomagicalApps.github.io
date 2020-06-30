@@ -81,10 +81,6 @@ var PDFAnnotate = function(container_id, url, options = {}) {
 				fabricObj.off('after:render')
 			})
 		});
-		$(fabricObj.upperCanvasEl).on('mousedown',function (event) {
-	            inst.active_canvas = index;
-			console.log('mousedown in pdfAnnotate.js');
-		});
 	}
 
 	this.fabricClickHandler = function(event, fabricObj) {
