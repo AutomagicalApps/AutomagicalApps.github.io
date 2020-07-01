@@ -358,6 +358,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 	    }
 	    
 	});
+	console.log('about to return imageItems');
 	return imageItems
 }
 
