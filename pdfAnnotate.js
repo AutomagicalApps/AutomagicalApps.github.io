@@ -7,7 +7,7 @@
 var PDFAnnotate = function(container_id, url, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
-	this.active_tool = 1; // 0 - Free hand, 1 - Rectangle, 2 - Text, 3 - Arrow, 
+	this.active_tool = 0; // 0 - Rectangle, 2 - Text, 3 - Arrow, 
 	this.fabricObjects = [];
 	this.fabricObjectsData = [];
 	this.color = '#212121';
