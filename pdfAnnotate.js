@@ -339,7 +339,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 	  	console.log('fabricObj:',fabricObj);
 		//console.log('fabricObj._objects:',fabricObj._objects);
 		//console.log('fabricObj._objects.length:'+fabricObj._objects.length);
-	    	if(fabricObj._objects.length>1){
+	    	if(fabricObj._objects.length>0){
 		    $.each(fabricObj._objects, function (index, item) {
 			    //for each object, crop image 
 			    //help from: https://stackoverflow.com/questions/18732876/crop-functionality-using-fabricjs
