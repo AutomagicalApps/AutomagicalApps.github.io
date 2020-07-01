@@ -358,6 +358,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 	    }
 	    
 	});
+	return imageItems
 }
 
 PDFAnnotate.prototype.loadFromJSON = function(jsonData) {
