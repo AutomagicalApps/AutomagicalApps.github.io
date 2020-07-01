@@ -331,7 +331,13 @@ PDFAnnotate.prototype.serializePdf = function() {
 
 PDFAnnotate.prototype.getFabricObjects = function() {
 	var inst = this;
-	return inst.fabricObjects;
+	//return inst.fabricObjects;
+	$.each(inst.fabricObjects, function (index, fabricObj) {
+	       //each page
+	   console.log('fabricObj[index]',fabricObj[index]);
+	    
+	    
+	});
 }
 
 PDFAnnotate.prototype.loadFromJSON = function(jsonData) {
