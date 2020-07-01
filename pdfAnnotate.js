@@ -351,8 +351,8 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 				width: item.width,
 				height: item.height
 			    });
-			    console.log('cropped',cropped);
-			    imageItems.push(cropped);
+			    console.log('cropped.src',cropped.src);
+			    imageItems.push(cropped.src);
 			    console.log('imageItems',imageItems);
 		    });
 	    }
