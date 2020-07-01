@@ -335,7 +335,8 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 	$.each(inst.fabricObjects, function (index, fabricObj) {
 	       //each page
 	   console.log('fabricObj:',fabricObj);
-		console.log('fabricObj.objects:',fabricObj.objects);
+		console.log('fabricObj._objects:',fabricObj._objects);
+		console.log('fabricObj._objects.length:'+fabricObj._objects.length);
 	    
 	    
 	});
