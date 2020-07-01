@@ -332,12 +332,30 @@ PDFAnnotate.prototype.serializePdf = function() {
 PDFAnnotate.prototype.getFabricObjects = function() {
 	var inst = this;
 	//return inst.fabricObjects;
+	var imageItems=[];
 	$.each(inst.fabricObjects, function (index, fabricObj) {
 	       //each page
-	   console.log('fabricObj:',fabricObj);
-		console.log('fabricObj._objects:',fabricObj._objects);
-		console.log('fabricObj._objects.length:'+fabricObj._objects.length);
-	    
+		//if fabricObj._objects.length>1 we put in an annotation
+	  	console.log('fabricObj:',fabricObj);
+		//console.log('fabricObj._objects:',fabricObj._objects);
+		//console.log('fabricObj._objects.length:'+fabricObj._objects.length);
+	    	if(fabricObj._objects.length>1){
+		    $.each(fabricObj._objects, function (index, item) {
+			    //for each object, crop image 
+			    //help from: https://stackoverflow.com/questions/18732876/crop-functionality-using-fabricjs
+				var cropped = new Image();
+			    	var canvas = item.canvas;
+			    	cropped.src = canvas.toDataURL({
+				left: item.left,
+				top: item.top,
+				width: item.width,
+				height: item.height
+			    });
+			    console.log('cropped',cropped);
+			    imageItems.push(cropped);
+			    console.log('imageItems',imageItems);
+		    });
+	    }
 	    
 	});
 }
