@@ -18,7 +18,10 @@ var PDFAnnotate = function(container_id, data, options = {}) {
 	this.container_id = container_id;
 	//this.url = url;
 	var inst = this;
-	var pdfData =  atob(decodeURIComponent(data));
+	console.log('data');
+	console.log(data);
+	var pdfData =  atob(data);
+	console.log('pdfData: ',pdfData);
 
 	var loadingTask = PDFJS.getDocument({data: pdfData});
 	loadingTask.promise.then(function (pdf) {
