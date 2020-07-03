@@ -115,7 +115,6 @@ var PDFAnnotate = function(container_id, data, options = {}) {
     }
     return uint8Array;
   }
-}
 var Rectangle = (function () {
     function Rectangle(canvas) {
         var inst=this;
