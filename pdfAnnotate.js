@@ -20,7 +20,7 @@ var PDFAnnotate = function(container_id, data, options = {}) {
 	var inst = this;
 	console.log('data');
 	console.log(data);
-	var pdfData =  atob(data);
+	var pdfData =  base64ToUint8Array(data);
 	console.log('pdfData: ',pdfData);
 
 	var loadingTask = PDFJS.getDocument({data: pdfData});
@@ -107,7 +107,15 @@ var PDFAnnotate = function(container_id, data, options = {}) {
 		}
 	}
 }
-
+ function base64ToUint8Array(base64) {
+    var raw = atob(base64);
+    var uint8Array = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) {
+      uint8Array[i] = raw.charCodeAt(i);
+    }
+    return uint8Array;
+  }
+}
 var Rectangle = (function () {
     function Rectangle(canvas) {
         var inst=this;
