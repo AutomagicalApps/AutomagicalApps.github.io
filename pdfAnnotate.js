@@ -171,7 +171,6 @@ Rectangle.prototype.bindEvents = function() {
       origY = pointer.y;
 
     	var rect = new fabric.Rect({
-	  id:'myAnnotationId',
           left: origX,
           top: origY,
           originX: 'left',
@@ -183,7 +182,15 @@ Rectangle.prototype.bindEvents = function() {
           hasBorders: false,
           hasControls: false
       });
-
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+  			return function() {
+    				return fabric.util.object.extend(toObject.call(this), {
+      				name: this.name
+    				});
+  			};
+	})(rect.toObject);
+	rect.name = 'myAnnotationName';
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
