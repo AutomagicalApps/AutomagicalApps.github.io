@@ -171,6 +171,7 @@ Rectangle.prototype.bindEvents = function() {
       origY = pointer.y;
 
     	var rect = new fabric.Rect({
+	  id:'myAnnotationId',
           left: origX,
           top: origY,
           originX: 'left',
