@@ -384,6 +384,7 @@ PDFAnnotate.prototype.getFabricObjectsData = function() {
 		//console.log('fabricObj._objects:',fabricObj._objects);
 		//console.log('fabricObj._objects.length:'+fabricObj._objects.length);
 	    	if(fabricObj._objects.length>0){
+		  var pageIndex = index;
 		    $.each(fabricObj._objects, function (index, item) {
 			    //for each object, crop image 
 			    var itemData = {
@@ -392,7 +393,7 @@ PDFAnnotate.prototype.getFabricObjectsData = function() {
 				    width: item.width,
 				    height: item.height,
 				    name: item.name,
-				    page: index
+				    page: pageIndex
 			    }
 			    console.log('itemData',itemData);
 			    areaDataItems.push(itemData);
