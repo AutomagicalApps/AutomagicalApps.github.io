@@ -4,7 +4,7 @@
  * Author: Ravisha Heshan
  */
 
-var PDFAnnotate = function(container_id, url, objectId, options = {}) {
+var PDFAnnotate = function(container_id, url, options = {}, objectId) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
 	this.active_tool = 0; // 0 - Rectangle, 2 - Text, 3 - Arrow, 
