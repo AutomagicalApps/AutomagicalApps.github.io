@@ -17,7 +17,7 @@ var PDFAnnotate = function(container_id, url, options = {}, objectId) {
 	this.active_canvas = 0;
 	this.container_id = container_id;
 	this.url = url;
-	this.objectId = objectId;
+	//this.objectId = objectId;
 	var inst = this;
 	
 	
@@ -436,7 +436,7 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-	    console.log('o: ',o);
+      console.log('inst.canvas.parentElement(): '+inst.canvas.parentElement());
 
 
       var pointer = inst.canvas.getPointer(o.e);
