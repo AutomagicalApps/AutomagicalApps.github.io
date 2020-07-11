@@ -192,7 +192,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = 'myAnnotationName';
+	rect.name = this.objectId;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
