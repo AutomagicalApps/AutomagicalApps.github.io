@@ -439,8 +439,9 @@ Rectangle.prototype.bindEvents = function() {
 	console.log('inst.canvas.getElement(): ',inst.canvas.getElement());
       console.log('inst.canvas.getElement().id: ',inst.canvas.getElement().id);
 	    console.log('inst.canvas.getElement().parentNode.parentNode.id: ',inst.canvas.getElement().parentNode.parentNode.id);
-      console.log('inst.canvas.getElement().parentNode.parentNode.parentNode.id: ',inst.canvas.getElement().parentNode.parentNode.parentNode.id);
-
+      console.log('inst.canvas.getElement().parentNode.parentNode.parentNode: ',inst.canvas.getElement().parentNode.parentNode.parentNode);
+	   console.log('document.getElementById("questionSelect").selectedOptions[0].value: ',document.getElementById("questionSelect").selectedOptions[0].value);
+	console.log('inst.canvas.getElement().parentNode.parentNode.parentNode.children: ',inst.canvas.getElement().parentNode.parentNode.parentNode.children);
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
