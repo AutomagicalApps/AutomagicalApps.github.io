@@ -374,6 +374,36 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 	return imageItems
 }
 
+PDFAnnotate.prototype.getFabricObjectsData = function() {
+	var inst = this;
+	var areaDataItems=[];
+	$.each(inst.fabricObjects, function (index, fabricObj) {
+	       //each page
+		//if fabricObj._objects.length>1 we put in an annotation
+	  	//console.log('fabricObj:',fabricObj);
+		//console.log('fabricObj._objects:',fabricObj._objects);
+		//console.log('fabricObj._objects.length:'+fabricObj._objects.length);
+	    	if(fabricObj._objects.length>0){
+		    $.each(fabricObj._objects, function (index, item) {
+			    //for each object, crop image 
+			    var itemData = {
+				    left: item.left,
+				    top: item.top,
+				    width: item.width,
+				    height: item.height,
+				    name: item.name
+			    }
+			    console.log('itemData',itemData);
+			    areaDataItems.push(itemData);
+			    console.log('areaDataItems',areaDataItems);
+		    });
+	    }
+	    
+	});
+	console.log('about to return areaDataItems');
+	return areaDataItems
+}
+
 PDFAnnotate.prototype.loadFromJSON = function(jsonData) {
 	var inst = this;
 	$.each(inst.fabricObjects, function (index, fabricObj) {
@@ -436,13 +466,8 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-	console.log('inst.canvas.getElement(): ',inst.canvas.getElement());
-      console.log('inst.canvas.getElement().id: ',inst.canvas.getElement().id);
-	    console.log('inst.canvas.getElement().parentNode.parentNode.id: ',inst.canvas.getElement().parentNode.parentNode.id);
-      console.log('inst.canvas.getElement().parentNode.parentNode.parentNode: ',inst.canvas.getElement().parentNode.parentNode.parentNode);
-	   console.log('document.getElementById("questionSelect").selectedOptions[0].value: ',document.getElementById("questionSelect").selectedOptions[0].value);
-	console.log('inst.canvas.getElement().parentNode.parentNode.parentNode.children: ',inst.canvas.getElement().parentNode.parentNode.parentNode.children);
-      var pointer = inst.canvas.getPointer(o.e);
+
+	var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
     
@@ -467,7 +492,7 @@ Rectangle.prototype.bindEvents = function() {
   			};
 	})(rect.toObject);
 	rect.name = document.getElementById("questionSelect").selectedOptions[0].value;
-  	  inst.canvas.add(rect).setActiveObject(rect);
+  	inst.canvas.add(rect).setActiveObject(rect);
     };
 
     Rectangle.prototype.isEnable = function(){
