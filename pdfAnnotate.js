@@ -20,6 +20,7 @@ var PDFAnnotate = function(container_id, url, options = {}, objectId) {
 	this.objectId = objectId;
 	console.log('this.objectId: '+this.objectId);
 	var inst = this;
+	console.log('inst.objectId: '+inst.objectId);
 	
 
 	var loadingTask = PDFJS.getDocument(this.url);
