@@ -491,7 +491,9 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
+	if(document.getElementById("questionSelect").selectedOptions[0].value != null){
 	rect.name = document.getElementById("questionSelect").selectedOptions[0].value;
+	}
   	inst.canvas.add(rect).setActiveObject(rect);
     };
 
