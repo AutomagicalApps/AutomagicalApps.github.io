@@ -460,7 +460,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = this.objectId;
+	rect.name = inst.objectId;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
