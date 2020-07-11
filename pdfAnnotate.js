@@ -18,10 +18,8 @@ var PDFAnnotate = function(container_id, url, options = {}, objectId) {
 	this.container_id = container_id;
 	this.url = url;
 	this.objectId = objectId;
-	console.log('this.objectId: '+this.objectId);
 	var inst = this;
-	console.log('inst.objectId: '+inst.objectId);
-	console.log('objectId: '+objectId);
+	
 	
 
 	var loadingTask = PDFJS.getDocument(this.url);
@@ -463,7 +461,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = objectId;
+	rect.name = o;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
