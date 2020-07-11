@@ -442,7 +442,7 @@ Rectangle.prototype.bindEvents = function() {
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
-
+      console.log('fabricObj.upperCanvasEl: ',fabricObj.upperCanvasEl);
     	var rect = new fabric.Rect({
           left: origX,
           top: origY,
