@@ -169,6 +169,7 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
+	    console.log('o: ',o);
 
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
