@@ -438,7 +438,7 @@ Rectangle.prototype.bindEvents = function() {
       inst.enable();
 	console.log('inst.canvas.getElement(): ',inst.canvas.getElement());
       console.log('inst.canvas.getElement().id: ',inst.canvas.getElement().id);
-      console.log('inst.canvas.getElement().parentNode.id: ',inst.canvas.getElement().parentNode.id);
+      console.log('inst.canvas.getElement().parentNode.parentNode.parentNode.getElementById("questionSelect").selectedOptions[0].value: ',inst.canvas.getElement().parentNode.parentNode.parentNode.getElementById("questionSelect").selectedOptions[0].value);
 
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
@@ -464,7 +464,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = inst.canvas.getElement().parentNode.parentNode.id;
+	rect.name = inst.canvas.getElement().parentNode.parentNode.parentNode.getElementById("questionSelect").selectedOptions[0].value;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
