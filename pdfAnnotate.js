@@ -4,7 +4,7 @@
  * Author: Ravisha Heshan
  */
 
-var PDFAnnotate = function(container_id, url, options = {}, objectId) {
+var PDFAnnotate = function(container_id, url, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
 	this.active_tool = 0; // 0 - Rectangle, 2 - Text, 3 - Arrow, 
@@ -436,13 +436,13 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-      //console.log('inst.canvas.parentElement(): '+inst.canvas.parentElement());
+      console.log('inst.canvas.getActiveObject(): '+inst.canvas.getActiveObject());
 
 
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
-      console.log('inst.canvas.getBoundingClientRect(): ',inst.canvas.getBoundingClientRect());
+      //console.log('inst.canvas.getBoundingClientRect(): ',inst.canvas.getBoundingClientRect());
     	var rect = new fabric.Rect({
           left: origX,
           top: origY,
