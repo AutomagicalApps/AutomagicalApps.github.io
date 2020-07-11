@@ -436,13 +436,14 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-      console.log('inst.canvas.getElement().id: '+inst.canvas.getElement().id);
-
+	console.log('inst.canvas.getElement(): ',inst.canvas.getElement());
+      console.log('inst.canvas.getElement().id: ',inst.canvas.getElement().id);
+      console.log('inst.canvas.getElement().parentNode.id: ',inst.canvas.getElement().parentNode.id);
 
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
-      //console.log('inst.canvas.getBoundingClientRect(): ',inst.canvas.getBoundingClientRect());
+    
     	var rect = new fabric.Rect({
           left: origX,
           top: origY,
@@ -463,7 +464,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = 'testName';
+	rect.name = inst.canvas.getElement().parentNode.parentNode.id;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
