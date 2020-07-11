@@ -18,6 +18,7 @@ var PDFAnnotate = function(container_id, url, options = {}, objectId) {
 	this.container_id = container_id;
 	this.url = url;
 	this.objectId = objectId;
+	console.log('this.objectId: '+this.objectId);
 	var inst = this;
 	
 
