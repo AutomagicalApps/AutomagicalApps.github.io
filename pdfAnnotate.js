@@ -465,7 +465,7 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
-	rect.name = inst.canvas.getElement().parentNode.parentNode.parentNode.id;
+	rect.name = document.getElementById("questionSelect").selectedOptions[0].value;
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
