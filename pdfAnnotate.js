@@ -394,8 +394,8 @@ PDFAnnotate.prototype.getFabricObjectsData = function() {
 				    height: item.height,
 				    name: item.name,
 				    page: pageIndex,
-				    canvasWidth: fabricObj._backgroundImage.width,
-				    canvasHeight: fabricObj._backgroundImage.height
+				    canvasWidth: item.canvas.width,
+				    canvasHeight: item.canvas.height
 			    }
 			    console.log('itemData',itemData);
 			    areaDataItems.push(itemData);
