@@ -252,7 +252,7 @@ PDFAnnotate.prototype.enableRectangle = function (top,left,width,height) {
 	}
 
 	var rect = new fabric.Rect({
-    type:'text',
+    		action:'text',
 		top:top,
 		left:left,
 		width: width,
@@ -365,8 +365,9 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 				height: item.height
 			    });
 			    console.log('cropped.src',cropped.src);
-          console.log('item.type',item.type);
-			    imageItems.push({type:item.type,image:cropped.src});
+          		    console.log('item.type',item.type);
+			    console.log('item.action',item.action);
+			    imageItems.push({action:item.action,image:cropped.src});
 			    console.log('imageItems',imageItems);
 		    });
 	    }
