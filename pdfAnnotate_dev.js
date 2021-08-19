@@ -194,6 +194,7 @@ Rectangle.prototype.bindEvents = function() {
   			};
 	})(rect.toObject);
 	rect.name = this.objectId;
+	    console.log('rect.name: ',rect.name);
   	  inst.canvas.add(rect).setActiveObject(rect);
     };
 
@@ -211,6 +212,7 @@ Rectangle.prototype.bindEvents = function() {
 
     return Rectangle;
 }());
+
 PDFAnnotate.prototype.enableSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
@@ -365,7 +367,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 			    });
 			    console.log('cropped.src',cropped.src);
           		    console.log('item.type',item.type);
-			    
+			     console.log('item.name',item.name);
 			    imageItems.push({type:item.type,image:cropped.src});
 			    console.log('imageItems',imageItems);
 		    });
@@ -498,7 +500,9 @@ Rectangle.prototype.bindEvents = function() {
   			};
 	})(rect.toObject);
 	if(this.selectBool == true){
+		//do we recognize selected rect?
 	rect.name = document.getElementById("questionSelect").selectedOptions[0].value;
+		console.log('rect.name in this.selectBool is true: ',rect.name);
 	}
   	inst.canvas.add(rect).setActiveObject(rect);
     };
