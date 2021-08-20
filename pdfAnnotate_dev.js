@@ -224,13 +224,16 @@ Rectangle.prototype.bindEvents = function() {
 	rect.toObject = (function(toObject) {
   			return function() {
     				return fabric.util.object.extend(toObject.call(this), {
-      				name: this.name
+      				name: this.name,
+					tool:this.tool
     				});
   			};
 	})(rect.toObject);
 	//console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = newUUID;
+	     rect.tool = 'textInsert';
 	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
+	     console.log('in Rectangle.prototype.onMouseDown with rect.tool: ',rect.tool);
   	inst.canvas.add(rect).setActiveObject(rect);
       }
     };
@@ -410,7 +413,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 			    console.log('cropped.src',cropped.src);
           		    console.log('item.type',item.type);
 			     console.log('item.className',item.className);
-			    imageItems.push({type:item.type,image:cropped.src});
+			    imageItems.push({type:item.type,tool:item.tool,image:cropped.src});
 			    console.log('imageItems',imageItems);
 		    });
 	    }
