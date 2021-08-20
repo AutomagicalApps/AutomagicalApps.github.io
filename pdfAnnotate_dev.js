@@ -142,8 +142,8 @@ var Shape = (function () {
     }
 	Shape.prototype.bindEvents = function() {
 		var inst = this;
-		console.log('inst.active_tool in bindEvents: ",inst.active_tool);
-		console.log('inst.canvas.active_tool in bindEvents: ",inst.canvas.active_tool);
+		console.log('inst.active_tool in bindEvents: ',inst.active_tool);
+		console.log('inst.canvas.active_tool in bindEvents: ',inst.canvas.active_tool);
 		inst.canvas.on('mouse:down', function(o) {
 			inst.onMouseDown(o);
 		});
