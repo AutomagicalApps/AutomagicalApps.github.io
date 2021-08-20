@@ -536,8 +536,12 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
 	//try to unbind all other events
+	if(ShapeAutomagical){
 	ShapeAutomagical.unBindEvents();
+	}
+	if(ShapeImage){
 	ShapeImage.unBindEvents();
+	}
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -553,8 +557,12 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
 	//try to unbind all other events
+	if(Shape){
 	Shape.unBindEvents();
+	}
+	if(ShapeAutomagical){
 	ShapeAutomagical.unBindEvents();
+	}
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -570,8 +578,12 @@ PDFAnnotate.prototype.enableAutomagicalSelector = function () {
 	var inst = this;
 	inst.active_tool = 3;
 	//try to unbind all other events
+	if(Shape){
 	Shape.unBindEvents();
+	}
+	if(ShapeImage){
 	ShapeImage.unBindEvents();
+	}
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
