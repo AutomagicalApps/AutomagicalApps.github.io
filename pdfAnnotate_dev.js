@@ -149,7 +149,8 @@ Rectangle.prototype.bindEvents = function() {
 
       activeObj.stroke= 'red',
       activeObj.strokeWidth= 1;
-      activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+      //activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+      activeObj.fill = 'transparent';
 
       if(origX > pointer.x){
           activeObj.set({ left: Math.abs(pointer.x) }); 
