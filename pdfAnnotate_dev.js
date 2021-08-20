@@ -214,11 +214,13 @@ Rectangle.prototype.bindEvents = function() {
           hasBorders: false,
           hasControls: false
       });
+	var newUUID = UUID.generate();
+	console.log('newUUID: ',newUUID);
 	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
 	rect.toObject = (function(toObject) {
   			return function() {
     				return fabric.util.object.extend(toObject.call(this), {
-      				name: UUID.generate()
+      				name: newUUID
     				});
   			};
 	})(rect.toObject);
