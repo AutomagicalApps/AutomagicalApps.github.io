@@ -263,6 +263,16 @@ PDFAnnotate.prototype.enableSelector = function () {
 	}
 }
 
+PDFAnnotate.prototype.enableImageSelector = function () {
+	var inst = this;
+	inst.active_tool = 1;
+	if (inst.fabricObjects.length > 0) {
+	    $.each(inst.fabricObjects, function (index, fabricObj) {
+	        fabricObj.isDrawingMode = false;
+	    });
+	}
+}
+
 PDFAnnotate.prototype.enablePencil = function () {
 	var inst = this;
 	inst.active_tool = 1;
