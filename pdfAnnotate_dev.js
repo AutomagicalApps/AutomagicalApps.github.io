@@ -88,15 +88,15 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	                color: inst.color
 	            }
 	        });
-		var arrow = new Shape(fabricObj);
-			inst.fabricObjects.push(fabricObj);
-			if (typeof options.onPageUpdated == 'function') {
-				fabricObj.on('object:added', function() {
-					var oldValue = Object.assign({}, inst.fabricObjectsData[index]);
-					inst.fabricObjectsData[index] = fabricObj.toJSON()
-					options.onPageUpdated(index + 1, oldValue, inst.fabricObjectsData[index]) 
-				})
-			}
+		
+		inst.fabricObjects.push(fabricObj);
+		if (typeof options.onPageUpdated == 'function') {
+			fabricObj.on('object:added', function() {
+				var oldValue = Object.assign({}, inst.fabricObjectsData[index]);
+				inst.fabricObjectsData[index] = fabricObj.toJSON()
+				options.onPageUpdated(index + 1, oldValue, inst.fabricObjectsData[index]) 
+			})
+		}
 	        fabricObj.setBackgroundImage(background, fabricObj.renderAll.bind(fabricObj));
 	        $(fabricObj.upperCanvasEl).click(function (event) {
 	            inst.active_canvas = index;
@@ -111,21 +111,21 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 
 	this.fabricClickHandler = function(event, fabricObj) {
 		var inst = this;
-	    if (inst.active_tool == 2) {
-	        var text = new fabric.IText('Sample text', {
-	            left: event.clientX - fabricObj.upperCanvasEl.getBoundingClientRect().left,
-	            top: event.clientY - fabricObj.upperCanvasEl.getBoundingClientRect().top,
-	            fill: inst.color,
-	            fontSize: inst.font_size,
-	            selectable: true
-	        });
-	        fabricObj.add(text);
-	        inst.active_tool = 0;
-	    }
+		if (inst.active_tool == 2) {
+			var text = new fabric.IText('Sample text', {
+			    left: event.clientX - fabricObj.upperCanvasEl.getBoundingClientRect().left,
+			    top: event.clientY - fabricObj.upperCanvasEl.getBoundingClientRect().top,
+			    fill: inst.color,
+			    fontSize: inst.font_size,
+			    selectable: true
+			});
+			fabricObj.add(text);
+			inst.active_tool = 0;
+		}
 		else{
 			console.log('in the else of fabricClickHandler with inst.active_tool: '+inst.active_tool);
 			//I think we can put in the logic here to construct free draw rectangle
-			
+
 		}
 	}
 }
@@ -140,71 +140,70 @@ var Shape = (function () {
         this.isDrawing = false;
         this.bindEvents();
     }
+	Shape.prototype.bindEvents = function() {
+		var inst = this;
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	Shape.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+	};
+	
+	Shape.prototype.onMouseMove = function (o) {
+		var inst = this;
 
-Shape.prototype.bindEvents = function() {
-    var inst = this;
-    inst.canvas.on('mouse:down', function(o) {
-      inst.onMouseDown(o);
-    });
-    inst.canvas.on('mouse:move', function(o) {
-      inst.onMouseMove(o);
-    });
-    inst.canvas.on('mouse:up', function(o) {
-      inst.onMouseUp(o);
-    });
-    inst.canvas.on('object:moving', function(o) {
-      inst.disable();
-    })
-  }
-    Shape.prototype.onMouseUp = function (o) {
-      var inst = this;
-      inst.disable();
-    };
 
-    Shape.prototype.onMouseMove = function (o) {
-      var inst = this;
+		if(!inst.isEnable()){ return; }
 
+		console.log("mouse move rectangle");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'red',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
 
-      if(!inst.isEnable()){ return; }
-	   
-      console.log("mouse move rectangle");
-      var pointer = inst.canvas.getPointer(o.e);
-      var activeObj = inst.canvas.getActiveObject();
-      console.log('activeObj: ',activeObj);
-      activeObj.stroke= 'red',
-      activeObj.strokeWidth= 1;
-      //activeObj.fill = 'rgba(255, 0, 0, 0.3)';
-      activeObj.fill = 'transparent';
-	    //see if the object has a name
-      console.log('activeObj.name: ',activeObj.name); 
-      if(origX > pointer.x){
-          activeObj.set({ left: Math.abs(pointer.x) }); 
-      }
-      if(origY > pointer.y){
-          activeObj.set({ top: Math.abs(pointer.y) });
-      }
-
-      activeObj.set({ width: Math.abs(origX - pointer.x) });
-      activeObj.set({ height: Math.abs(origY - pointer.y) });
-      //var objectId = UUID.generate();
-      //activeObj.set({ id: UUID.generate() });
-      activeObj.setCoords();
-      inst.canvas.renderAll();
-
-    };
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
 
     Shape.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
 	    console.log('in Shape.prototype.onMouseDown with o: ',o);
 	    console.log('o.target: ',o.target);
- //if target, don't create a new rect
-     if(o.target==null){
-      var pointer = inst.canvas.getPointer(o.e);
-      origX = pointer.x;
-      origY = pointer.y;
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
 
-
+//TODO: change options in here based on active tool
+		console.log('inst.active_tool: ',inst.active_tool);
     	var rect = new fabric.Rect({
           left: origX,
           top: origY,
