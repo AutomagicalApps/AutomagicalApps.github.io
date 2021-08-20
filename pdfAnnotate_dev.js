@@ -132,16 +132,16 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 
 
 
-var Rectangle = (function () {
-    function Rectangle(canvas) {
+var Shape = (function () {
+    function Shape(canvas) {
         var inst=this;
         this.canvas = canvas;
-        this.className= 'Rectangle';
+        this.className= 'Shape';
         this.isDrawing = false;
         this.bindEvents();
     }
 
-Rectangle.prototype.bindEvents = function() {
+Shape.prototype.bindEvents = function() {
     var inst = this;
     inst.canvas.on('mouse:down', function(o) {
       inst.onMouseDown(o);
@@ -156,12 +156,12 @@ Rectangle.prototype.bindEvents = function() {
       inst.disable();
     })
   }
-    Rectangle.prototype.onMouseUp = function (o) {
+    Shape.prototype.onMouseUp = function (o) {
       var inst = this;
       inst.disable();
     };
 
-    Rectangle.prototype.onMouseMove = function (o) {
+    Shape.prototype.onMouseMove = function (o) {
       var inst = this;
 
 
@@ -193,10 +193,10 @@ Rectangle.prototype.bindEvents = function() {
 
     };
 
-    Rectangle.prototype.onMouseDown = function (o) {
+    Shape.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-	    console.log('in Rectangle.prototype.onMouseDown with o: ',o);
+	    console.log('in Shape.prototype.onMouseDown with o: ',o);
 	    console.log('o.target: ',o.target);
  //if target, don't create a new rect
      if(o.target==null){
@@ -232,25 +232,25 @@ Rectangle.prototype.bindEvents = function() {
 	//console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = newUUID;
 	     rect.tool = 'textInsert';
-	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
-	     console.log('in Rectangle.prototype.onMouseDown with rect.tool: ',rect.tool);
+	console.log('in Shape.prototype.onMouseDown with rect.name: ',rect.name);
+	     console.log('in Shape.prototype.onMouseDown with rect.tool: ',rect.tool);
   	inst.canvas.add(rect).setActiveObject(rect);
       }
     };
 
-    Rectangle.prototype.isEnable = function(){
+    Shape.prototype.isEnable = function(){
       return this.isDrawing;
     }
 
-    Rectangle.prototype.enable = function(){
+    Shape.prototype.enable = function(){
       this.isDrawing = true;
     }
 
-    Rectangle.prototype.disable = function(){
+    Shape.prototype.disable = function(){
       this.isDrawing = false;
     }
 
-    return Rectangle;
+    return Shape;
 }());
 
 
