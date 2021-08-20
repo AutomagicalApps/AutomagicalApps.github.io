@@ -166,6 +166,7 @@ Rectangle.prototype.bindEvents = function() {
 
 
       if(!inst.isEnable()){ return; }
+	   
       console.log("mouse move rectangle");
       var pointer = inst.canvas.getPointer(o.e);
       var activeObj = inst.canvas.getActiveObject();
@@ -196,7 +197,9 @@ Rectangle.prototype.bindEvents = function() {
       var inst = this;
       inst.enable();
 	    console.log('in Rectangle.prototype.onMouseDown with o: ',o);
-
+	    console.log('o.target: ',o.target);
+ //if target, don't create a new rect
+     if(o.target==null){
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
@@ -229,6 +232,7 @@ Rectangle.prototype.bindEvents = function() {
 	rect.name = newUUID;
 	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
   	inst.canvas.add(rect).setActiveObject(rect);
+      }
     };
 
     Rectangle.prototype.isEnable = function(){
