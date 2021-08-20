@@ -30,7 +30,7 @@ var UUID = (function() {
 var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
-	this.active_tool = 0; // 0 - Rectangle, 2 - Text, 3 - Arrow, 
+	this.active_tool = 0; // 0 - AreaSelector, 1- ImageSelector, 2 - Text, 3 - Arrow, 
 	this.fabricObjects = [];
 	this.fabricObjectsData = [];
 	this.color = '#212121';
@@ -267,7 +267,7 @@ var Shape = (function () {
 }());
 
 
-PDFAnnotate.prototype.enableSelector = function () {
+PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
 	if (inst.fabricObjects.length > 0) {
@@ -293,7 +293,7 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 
 PDFAnnotate.prototype.enablePencil = function () {
 	var inst = this;
-	inst.active_tool = 1;
+	inst.active_tool = 1.5;
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = true;
