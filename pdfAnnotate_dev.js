@@ -267,6 +267,271 @@ var Shape = (function () {
 }());
 
 
+var ShapeImage = (function () {
+    function ShapeImage(canvas,callback) {
+        var inst=this;
+        this.canvas = canvas;
+        this.className= 'ShapeImage';
+        this.isDrawing = false;
+    	this.callback = callback;
+        this.bindEvents();
+    }
+	ShapeImage.prototype.bindEvents = function() {
+		var inst = this;
+		console.log('inst.active_tool in bindEvents: ',inst.active_tool);
+		console.log('inst.canvas.active_tool in bindEvents: ',inst.canvas.active_tool);
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	ShapeImage.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
+	ShapeImage.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+		//inst.unBindEvents();
+    		if (inst.callback) inst.callback();
+	};
+	
+	ShapeImage.prototype.onMouseMove = function (o) {
+		var inst = this;
+
+
+		if(!inst.isEnable()){ return; }
+
+		console.log("mouse move ShapeImage");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'blue',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
+
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
+
+    ShapeImage.prototype.onMouseDown = function (o) {
+      var inst = this;
+      inst.enable();
+	    console.log('in ShapeImage.prototype.onMouseDown with o: ',o);
+	    console.log('o.target: ',o.target);
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
+
+    	var rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x-origX,
+          height: pointer.y-origY,
+          angle: 0,
+          transparentCorners: false,
+          hasBorders: false,
+          hasControls: false
+      });
+	var newUUID = UUID.generate();
+	//newUUID = newUUID.toString();
+	console.log('newUUID: ',newUUID);
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+  			return function() {
+    				return fabric.util.object.extend(toObject.call(this), {
+      				name: this.name,
+					tool:this.tool
+    				});
+  			};
+	})(rect.toObject);
+	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	     rect.tool = 'imageInsert';
+	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
+	     console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
+  	inst.canvas.add(rect).setActiveObject(rect);
+      }
+    };
+
+    ShapeImage.prototype.isEnable = function(){
+      return this.isDrawing;
+    }
+
+    ShapeImage.prototype.enable = function(){
+      this.isDrawing = true;
+    }
+
+    ShapeImage.prototype.disable = function(){
+      this.isDrawing = false;
+    }
+
+    return ShapeImage;
+}());
+
+
+var ShapeAutomagical = (function () {
+    function ShapeAutomagical(canvas,callback) {
+        var inst=this;
+        this.canvas = canvas;
+        this.className= 'ShapeAutomagical';
+        this.isDrawing = false;
+    	this.callback = callback;
+        this.bindEvents();
+    }
+	ShapeAutomagical.prototype.bindEvents = function() {
+		var inst = this;
+		
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	ShapeAutomagical.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
+	ShapeAutomagical.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+		//inst.unBindEvents();
+    		if (inst.callback) inst.callback();
+	};
+	
+	ShapeAutomagical.prototype.onMouseMove = function (o) {
+		var inst = this;
+
+
+		if(!inst.isEnable()){ return; }
+
+		console.log("mouse move ShapeAutomagical");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'purple',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
+
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
+
+    ShapeAutomagical.prototype.onMouseDown = function (o) {
+      var inst = this;
+      inst.enable();
+	    console.log('in ShapeAutomagical.prototype.onMouseDown with o: ',o);
+	    console.log('o.target: ',o.target);
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
+
+//TODO: change options in here based on active tool
+		console.log('inst.active_tool: ',inst.active_tool);
+		console.log('inst.canvas.active_tool: ',inst.canvas.active_tool);
+    	var rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x-origX,
+          height: pointer.y-origY,
+          angle: 0,
+          transparentCorners: false,
+          hasBorders: false,
+          hasControls: false
+      });
+	var newUUID = UUID.generate();
+	//newUUID = newUUID.toString();
+	console.log('newUUID: ',newUUID);
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+  			return function() {
+    				return fabric.util.object.extend(toObject.call(this), {
+      				name: this.name,
+					tool:this.tool
+    				});
+  			};
+	})(rect.toObject);
+	//console.log('in ShapeAutomagical.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	     rect.tool = 'automagicalInsert';
+	console.log('in ShapeAutomagical.prototype.onMouseDown with rect.name: ',rect.name);
+	     console.log('in ShapeAutomagical.prototype.onMouseDown with rect.tool: ',rect.tool);
+  	inst.canvas.add(rect).setActiveObject(rect);
+      }
+    };
+
+    ShapeAutomagical.prototype.isEnable = function(){
+      return this.isDrawing;
+    }
+
+    ShapeAutomagical.prototype.enable = function(){
+      this.isDrawing = true;
+    }
+
+    ShapeAutomagical.prototype.disable = function(){
+      this.isDrawing = false;
+    }
+
+    return ShapeAutomagical;
+}());
+
 PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
@@ -287,6 +552,24 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
+		    //like arrow
+		    new ShapeImage(fabricObj, function () {
+	            inst.active_tool = 1;
+	        });
+	    });
+	}
+}
+
+PDFAnnotate.prototype.enableAutomagicalSelector = function () {
+	var inst = this;
+	inst.active_tool = 3;
+	if (inst.fabricObjects.length > 0) {
+	    $.each(inst.fabricObjects, function (index, fabricObj) {
+	        fabricObj.isDrawingMode = false;
+		    //like arrow
+		    new ShapeAutomagical(fabricObj, function () {
+	            inst.active_tool = 3;
+	        });
 	    });
 	}
 }
@@ -335,7 +618,7 @@ PDFAnnotate.prototype.enableRectangle = function (top,left,width,height) {
 
 PDFAnnotate.prototype.enableAddArrow = function () {
 	var inst = this;
-	inst.active_tool = 3;
+	//inst.active_tool = 3;
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
