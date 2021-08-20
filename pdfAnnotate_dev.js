@@ -448,7 +448,7 @@ Rectangle.prototype.bindEvents = function() {
       
 
       if(!inst.isEnable()){ return; }
-      console.log("mouse move rectange");
+      console.log("mouse move rectange going on");
       var pointer = inst.canvas.getPointer(o.e);
       var activeObj = inst.canvas.getActiveObject();
 
