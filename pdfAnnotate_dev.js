@@ -321,7 +321,11 @@ PDFAnnotate.prototype.deleteSelectedObject = function () {
 	var activeObject = inst.fabricObjects[inst.active_canvas].getActiveObject();
 	if (activeObject)
 	{
-	    if (confirm('Are you sure ?')) inst.fabricObjects[inst.active_canvas].remove(activeObject);
+	    if (confirm('Are you sure ?')) {
+		    inst.fabricObjects[inst.active_canvas].remove(activeObject);
+		    inst.canvas.discardActiveObject();
+    		    inst.canvas.requestRenderAll();
+	    }
 	}
 }
 
