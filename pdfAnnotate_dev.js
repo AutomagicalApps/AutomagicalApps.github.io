@@ -536,10 +536,10 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
 	//try to unbind all other events
-	 inst.active_canvas.off('mouse:down');
-	    inst.active_canvas.off('mouse:up');
-	    inst.active_canvas.off('mouse:move');
-	    inst.active_canvas.off('object:moving');
+	 inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -555,10 +555,10 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
 	//try to unbind all other events
-	 inst.active_canvas.off('mouse:down');
-	    inst.active_canvas.off('mouse:up');
-	    inst.active_canvas.off('mouse:move');
-	    inst.active_canvas.off('object:moving');
+	 inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -574,10 +574,11 @@ PDFAnnotate.prototype.enableAutomagicalSelector = function () {
 	var inst = this;
 	inst.active_tool = 3;
 	//try to unbind all other events
-	 inst.active_canvas.off('mouse:down');
-	    inst.active_canvas.off('mouse:up');
-	    inst.active_canvas.off('mouse:move');
-	    inst.active_canvas.off('object:moving');
+	 //try to unbind all other events
+	 inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
 	
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
