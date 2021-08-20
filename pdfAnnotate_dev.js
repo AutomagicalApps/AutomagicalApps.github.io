@@ -169,7 +169,7 @@ var Shape = (function () {
 	Shape.prototype.onMouseUp = function (o) {
 		var inst = this;
 		inst.disable();
-		inst.unBindEvents();
+		//inst.unBindEvents();
     		if (inst.callback) inst.callback();
 	};
 	
