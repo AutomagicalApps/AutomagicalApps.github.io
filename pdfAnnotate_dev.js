@@ -100,7 +100,7 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	        inst.active_tool = 0;
 	    }
 		else{
-			console.log('inst.active_tool: '+inst.active_tool);
+			console.log('in the else of fabricClickHandler with inst.active_tool: '+inst.active_tool);
 			//I think we can put in the logic here to construct free draw rectangle
 			
 		}
@@ -170,7 +170,7 @@ Rectangle.prototype.bindEvents = function() {
     Rectangle.prototype.onMouseDown = function (o) {
       var inst = this;
       inst.enable();
-	    console.log('o: ',o);
+	    console.log('in Rectangle.prototype.onMouseDown with o: ',o);
 
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
@@ -196,9 +196,10 @@ Rectangle.prototype.bindEvents = function() {
     				});
   			};
 	})(rect.toObject);
+	console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = this.objectId;
-	    console.log('rect.name: ',rect.name);
-  	  inst.canvas.add(rect).setActiveObject(rect);
+	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
+  	inst.canvas.add(rect).setActiveObject(rect);
     };
 
     Rectangle.prototype.isEnable = function(){
@@ -371,7 +372,7 @@ PDFAnnotate.prototype.getFabricObjects = function() {
 			    });
 			    console.log('cropped.src',cropped.src);
           		    console.log('item.type',item.type);
-			     console.log('item.name',item.name);
+			     console.log('item.className',item.className);
 			    imageItems.push({type:item.type,image:cropped.src});
 			    console.log('imageItems',imageItems);
 		    });
