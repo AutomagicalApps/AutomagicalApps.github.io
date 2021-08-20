@@ -215,18 +215,18 @@ Rectangle.prototype.bindEvents = function() {
           hasControls: false
       });
 	var newUUID = UUID.generate();
-	newUUID = newUUID.toString();
+	//newUUID = newUUID.toString();
 	console.log('newUUID: ',newUUID);
 	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
 	rect.toObject = (function(toObject) {
   			return function() {
     				return fabric.util.object.extend(toObject.call(this), {
-      				name: newUUID
+      				name: this.name
     				});
   			};
 	})(rect.toObject);
 	//console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
-	//rect.name = this.objectId;
+	rect.name = newUUID;
 	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
   	inst.canvas.add(rect).setActiveObject(rect);
     };
