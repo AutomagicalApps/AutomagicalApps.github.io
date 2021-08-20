@@ -88,7 +88,7 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	                color: inst.color
 	            }
 	        });
-		new Shape(fabricObj);
+		//new Shape(fabricObj);
 		inst.fabricObjects.push(fabricObj);
 		if (typeof options.onPageUpdated == 'function') {
 			fabricObj.on('object:added', function() {
@@ -133,11 +133,12 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 
 
 var Shape = (function () {
-    function Shape(canvas) {
+    function Shape(canvas,callback) {
         var inst=this;
         this.canvas = canvas;
         this.className= 'Shape';
         this.isDrawing = false;
+    	this.callback = callback;
         this.bindEvents();
     }
 	Shape.prototype.bindEvents = function() {
@@ -157,9 +158,19 @@ var Shape = (function () {
 			inst.disable();
 		})
 	}
+	Shape.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
 	Shape.prototype.onMouseUp = function (o) {
 		var inst = this;
 		inst.disable();
+		inst.unBindEvents();
+    		if (inst.callback) inst.callback();
 	};
 	
 	Shape.prototype.onMouseMove = function (o) {
@@ -262,6 +273,10 @@ PDFAnnotate.prototype.enableSelector = function () {
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
+		    //like arrow
+		    new Shape(fabricObj, function () {
+	            inst.active_tool = 0;
+	        });
 	    });
 	}
 }
