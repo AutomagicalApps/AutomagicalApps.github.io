@@ -204,6 +204,7 @@ var Shape = (function () {
 
 //TODO: change options in here based on active tool
 		console.log('inst.active_tool: ',inst.active_tool);
+		console.log('inst.canvas.active_tool: ',inst.canvas.active_tool);
     	var rect = new fabric.Rect({
           left: origX,
           top: origY,
