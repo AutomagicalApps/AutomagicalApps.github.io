@@ -578,7 +578,7 @@ PDFAnnotate.prototype.enableAutomagicalSelector = function () {
 	    inst.active_canvas.off('mouse:up');
 	    inst.active_canvas.off('mouse:move');
 	    inst.active_canvas.off('object:moving');
-	}
+	
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
