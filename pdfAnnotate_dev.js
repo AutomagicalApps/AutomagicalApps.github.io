@@ -146,7 +146,7 @@ Rectangle.prototype.bindEvents = function() {
       console.log("mouse move rectangle");
       var pointer = inst.canvas.getPointer(o.e);
       var activeObj = inst.canvas.getActiveObject();
-
+      console.log('activeObj: ',activeObj);
       activeObj.stroke= 'red',
       activeObj.strokeWidth= 1;
       //activeObj.fill = 'rgba(255, 0, 0, 0.3)';
