@@ -535,6 +535,9 @@ var ShapeAutomagical = (function () {
 PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
+	//try to unbind all other events
+	ShapeAutomagical.unbindEvents();
+	ShapeImage.unbindEvents();
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -549,6 +552,9 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
+	//try to unbind all other events
+	Shape.unbindEvents();
+	ShapeAutomagical.unbindEvents();
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -563,6 +569,9 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 PDFAnnotate.prototype.enableAutomagicalSelector = function () {
 	var inst = this;
 	inst.active_tool = 3;
+	//try to unbind all other events
+	Shape.unbindEvents();
+	ShapeImage.unbindEvents();
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
