@@ -88,7 +88,7 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	                color: inst.color
 	            }
 	        });
-		var arrow = new Rectangle(fabricObj);
+		var arrow = new Shape(fabricObj);
 			inst.fabricObjects.push(fabricObj);
 			if (typeof options.onPageUpdated == 'function') {
 				fabricObj.on('object:added', function() {
