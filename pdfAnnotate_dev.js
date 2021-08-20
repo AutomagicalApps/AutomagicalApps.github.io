@@ -215,6 +215,7 @@ Rectangle.prototype.bindEvents = function() {
           hasControls: false
       });
 	var newUUID = UUID.generate();
+	newUUID = newUUID.toString();
 	console.log('newUUID: ',newUUID);
 	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
 	rect.toObject = (function(toObject) {
