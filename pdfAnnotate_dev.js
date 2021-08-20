@@ -169,7 +169,7 @@ var Shape = (function () {
 	Shape.prototype.onMouseUp = function (o) {
 		var inst = this;
 		inst.disable();
-		//inst.unBindEvents();
+		inst.unBindEvents();
     		if (inst.callback) inst.callback();
 	};
 	
@@ -304,7 +304,7 @@ var ShapeImage = (function () {
 	ShapeImage.prototype.onMouseUp = function (o) {
 		var inst = this;
 		inst.disable();
-		//inst.unBindEvents();
+		inst.unBindEvents();
     		if (inst.callback) inst.callback();
 	};
 	
@@ -435,7 +435,7 @@ var ShapeAutomagical = (function () {
 	ShapeAutomagical.prototype.onMouseUp = function (o) {
 		var inst = this;
 		inst.disable();
-		//inst.unBindEvents();
+		inst.unBindEvents();
     		if (inst.callback) inst.callback();
 	};
 	
@@ -535,11 +535,6 @@ var ShapeAutomagical = (function () {
 PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
-	//try to unbind all other events
-	 inst.canvas.off('mouse:down');
-	    inst.canvas.off('mouse:up');
-	    inst.canvas.off('mouse:move');
-	    inst.canvas.off('object:moving');
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -554,11 +549,6 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
-	//try to unbind all other events
-	 inst.canvas.off('mouse:down');
-	    inst.canvas.off('mouse:up');
-	    inst.canvas.off('mouse:move');
-	    inst.canvas.off('object:moving');
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
@@ -573,13 +563,6 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 PDFAnnotate.prototype.enableAutomagicalSelector = function () {
 	var inst = this;
 	inst.active_tool = 3;
-	//try to unbind all other events
-	 //try to unbind all other events
-	 inst.canvas.off('mouse:down');
-	    inst.canvas.off('mouse:up');
-	    inst.canvas.off('mouse:move');
-	    inst.canvas.off('object:moving');
-	
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
