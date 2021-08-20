@@ -4,6 +4,29 @@
  * Author: Ravisha Heshan
  */
 
+//UUID for object id generation
+/**
+ * Fast UUID generator, RFC4122 version 4 compliant.
+ * @author Jeff Ward (jcward.com).
+ * @license MIT license
+ * @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
+ **/
+var UUID = (function() {
+  var self = {};
+  var lut = []; for (var i=0; i<256; i++) { lut[i] = (i<16?'0':'')+(i).toString(16); }
+  self.generate = function() {
+    var d0 = Math.random()*0xffffffff|0;
+    var d1 = Math.random()*0xffffffff|0;
+    var d2 = Math.random()*0xffffffff|0;
+    var d3 = Math.random()*0xffffffff|0;
+    return lut[d0&0xff]+lut[d0>>8&0xff]+lut[d0>>16&0xff]+lut[d0>>24&0xff]+'-'+
+      lut[d1&0xff]+lut[d1>>8&0xff]+'-'+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+'-'+
+      lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+'-'+lut[d2>>16&0xff]+lut[d2>>24&0xff]+
+      lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
+  }
+  return self;
+})();
+
 var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
@@ -151,7 +174,8 @@ Rectangle.prototype.bindEvents = function() {
       activeObj.strokeWidth= 1;
       //activeObj.fill = 'rgba(255, 0, 0, 0.3)';
       activeObj.fill = 'transparent';
-
+	    //see if the object has a name
+      console.log('activeObj.name: ',activeObj.name); 
       if(origX > pointer.x){
           activeObj.set({ left: Math.abs(pointer.x) }); 
       }
@@ -161,7 +185,8 @@ Rectangle.prototype.bindEvents = function() {
 
       activeObj.set({ width: Math.abs(origX - pointer.x) });
       activeObj.set({ height: Math.abs(origY - pointer.y) });
-
+      //var objectId = UUID.generate();
+      //activeObj.set({ id: UUID.generate() });
       activeObj.setCoords();
       inst.canvas.renderAll();
 
@@ -175,6 +200,7 @@ Rectangle.prototype.bindEvents = function() {
       var pointer = inst.canvas.getPointer(o.e);
       origX = pointer.x;
       origY = pointer.y;
+
 
     	var rect = new fabric.Rect({
           left: origX,
@@ -192,12 +218,12 @@ Rectangle.prototype.bindEvents = function() {
 	rect.toObject = (function(toObject) {
   			return function() {
     				return fabric.util.object.extend(toObject.call(this), {
-      				name: this.name
+      				name: UUID.generate()
     				});
   			};
 	})(rect.toObject);
-	console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
-	rect.name = this.objectId;
+	//console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	//rect.name = this.objectId;
 	console.log('in Rectangle.prototype.onMouseDown with rect.name: ',rect.name);
   	inst.canvas.add(rect).setActiveObject(rect);
     };
