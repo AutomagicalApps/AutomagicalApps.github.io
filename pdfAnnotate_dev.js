@@ -139,6 +139,7 @@ var Shape = (function () {
         this.className= 'Shape';
         this.isDrawing = false;
     	this.callback = callback;
+	    this.unBindEvents();
         this.bindEvents();
     }
 	Shape.prototype.bindEvents = function() {
@@ -274,6 +275,7 @@ var ShapeImage = (function () {
         this.className= 'ShapeImage';
         this.isDrawing = false;
     	this.callback = callback;
+	    this.unBindEvents();
         this.bindEvents();
     }
 	ShapeImage.prototype.bindEvents = function() {
@@ -406,6 +408,7 @@ var ShapeAutomagical = (function () {
         this.className= 'ShapeAutomagical';
         this.isDrawing = false;
     	this.callback = callback;
+	    this.unBindEvents();
         this.bindEvents();
     }
 	ShapeAutomagical.prototype.bindEvents = function() {
