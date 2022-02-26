@@ -30,7 +30,7 @@ var UUID = (function() {
 var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	this.number_of_pages = 0;
 	this.pages_rendered = 0;
-	this.active_tool = 0; // 0 - AreaSelector, 1- ImageSelector, 2 - Text, 3 - Arrow, 
+	this.active_tool = 0; 
 	this.fabricObjects = [];
 	this.fabricObjectsData = [];
 	this.color = '#212121';
@@ -41,6 +41,7 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	this.container_id = container_id;
 	this.url = url;
 	this.selectBool = selectBool;
+	this.isCorrectBool = false;
 	var inst = this;
 	
 	
@@ -139,7 +140,7 @@ var Shape = (function () {
         this.className= 'Shape';
         this.isDrawing = false;
     	this.callback = callback;
-	    this.unBindEvents();
+	this.unBindEvents();
         this.bindEvents();
     }
 	Shape.prototype.bindEvents = function() {
@@ -180,7 +181,7 @@ var Shape = (function () {
 
 		if(!inst.isEnable()){ return; }
 
-		console.log("mouse move rectangle");
+		console.log("in Shape.onMouseMove");
 		var pointer = inst.canvas.getPointer(o.e);
 		var activeObj = inst.canvas.getActiveObject();
 		console.log('activeObj: ',activeObj);
@@ -206,51 +207,57 @@ var Shape = (function () {
 	};
 
     Shape.prototype.onMouseDown = function (o) {
-      var inst = this;
-      inst.enable();
+	    var inst = this;
+	    inst.enable();
 	    console.log('in Shape.prototype.onMouseDown with o: ',o);
 	    console.log('o.target: ',o.target);
- 	//if target, don't create a new rect
-     	if(o.target==null){
-      	var pointer = inst.canvas.getPointer(o.e);
-      	origX = pointer.x;
-      	origY = pointer.y;
+	    //if target, don't create a new rect
+	    
+	    if(o.target==null){
+      		var pointer = inst.canvas.getPointer(o.e);
+      		origX = pointer.x;
+      		origY = pointer.y;
 
-//TODO: change options in here based on active tool
+		//TODO: change options in here based on active tool
 		console.log('inst.active_tool: ',inst.active_tool);
 		console.log('inst.canvas.active_tool: ',inst.canvas.active_tool);
-    	var rect = new fabric.Rect({
-          left: origX,
-          top: origY,
-          originX: 'left',
-          originY: 'top',
-          width: pointer.x-origX,
-          height: pointer.y-origY,
-          angle: 0,
-          transparentCorners: false,
-          hasBorders: false,
-          hasControls: false
-      });
-	var newUUID = UUID.generate();
-	//newUUID = newUUID.toString();
-	console.log('newUUID: ',newUUID);
-	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
-	rect.toObject = (function(toObject) {
-  			return function() {
-    				return fabric.util.object.extend(toObject.call(this), {
-      				name: this.name,
-					tool:this.tool
-    				});
-  			};
-	})(rect.toObject);
-	//console.log('in Rectangle.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
-	rect.name = newUUID;
-	     rect.tool = 'textInsert';
-	console.log('in Shape.prototype.onMouseDown with rect.name: ',rect.name);
-	     console.log('in Shape.prototype.onMouseDown with rect.tool: ',rect.tool);
-  	inst.canvas.add(rect).setActiveObject(rect);
-      }
-    };
+    	
+		var rect = new fabric.Rect({
+		  left: origX,
+		  top: origY,
+		  originX: 'left',
+		  originY: 'top',
+		  width: pointer.x-origX,
+		  height: pointer.y-origY,
+		  angle: 0,
+		  transparentCorners: false,
+		  hasBorders: false,
+		  hasControls: false
+	      	});
+		
+		var newUUID = UUID.generate();
+		//newUUID = newUUID.toString();
+		console.log('newUUID: ',newUUID);
+		//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+		rect.toObject = (function(toObject) {
+				return function() {
+					return fabric.util.object.extend(toObject.call(this), {
+						name: this.name,
+						tool:this.tool,
+						isCorrect: this.isCorrectBool
+					});
+				};
+		})(rect.toObject);
+		//console.log('in Shape.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+		rect.name = newUUID;
+		rect.tool = 'textInsert';
+		rect.isCorrect = this.isCorrectBool;	
+		console.log('in Shape.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+		console.log('in Shape.prototype.onMouseDown with rect.name: ',rect.name);
+		console.log('in Shape.prototype.onMouseDown with rect.tool: ',rect.tool);
+		inst.canvas.add(rect).setActiveObject(rect);
+	      }
+	    };
 
     Shape.prototype.isEnable = function(){
       return this.isDrawing;
@@ -275,7 +282,8 @@ var ShapeImage = (function () {
         this.className= 'ShapeImage';
         this.isDrawing = false;
     	this.callback = callback;
-	    this.unBindEvents();
+	   
+	this.unBindEvents();
         this.bindEvents();
     }
 	ShapeImage.prototype.bindEvents = function() {
@@ -367,6 +375,8 @@ var ShapeImage = (function () {
 	var newUUID = UUID.generate();
 	//newUUID = newUUID.toString();
 	console.log('newUUID: ',newUUID);
+		
+	/*
 	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
 	rect.toObject = (function(toObject) {
   			return function() {
@@ -381,6 +391,25 @@ var ShapeImage = (function () {
 	     rect.tool = 'imageInsert';
 	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
 	     console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
+	*/
+		
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+			return function() {
+				return fabric.util.object.extend(toObject.call(this), {
+					name: this.name,
+					tool:this.tool,
+					isCorrect: this.isCorrectBool
+				});
+			};
+	})(rect.toObject);
+	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	rect.tool = 'imageInsert';
+	rect.isCorrect = this.isCorrectBool;	
+	console.log('in ShapeImage.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
+	console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
   	inst.canvas.add(rect).setActiveObject(rect);
       }
     };
@@ -408,7 +437,7 @@ var ShapeAutomagical = (function () {
         this.className= 'ShapeAutomagical';
         this.isDrawing = false;
     	this.callback = callback;
-	    this.unBindEvents();
+	this.unBindEvents();
         this.bindEvents();
     }
 	ShapeAutomagical.prototype.bindEvents = function() {
@@ -504,18 +533,21 @@ var ShapeAutomagical = (function () {
 	console.log('newUUID: ',newUUID);
 	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
 	rect.toObject = (function(toObject) {
-  			return function() {
-    				return fabric.util.object.extend(toObject.call(this), {
-      				name: this.name,
-					tool:this.tool
-    				});
-  			};
+			return function() {
+				return fabric.util.object.extend(toObject.call(this), {
+					name: this.name,
+					tool:this.tool,
+					isCorrect: this.isCorrectBool
+				});
+			};
 	})(rect.toObject);
-	//console.log('in ShapeAutomagical.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = newUUID;
-	     rect.tool = 'automagicalInsert';
-	console.log('in ShapeAutomagical.prototype.onMouseDown with rect.name: ',rect.name);
-	     console.log('in ShapeAutomagical.prototype.onMouseDown with rect.tool: ',rect.tool);
+	rect.tool = 'automagicalInsert';
+	rect.isCorrect = this.isCorrectBool;	
+	console.log('in ShapeImage.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
+	console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
   	inst.canvas.add(rect).setActiveObject(rect);
       }
     };
@@ -535,6 +567,282 @@ var ShapeAutomagical = (function () {
     return ShapeAutomagical;
 }());
 
+var ShapeCorrectText = (function () {
+    function ShapeCorrectText(canvas,callback) {
+        var inst=this;
+        this.canvas = canvas;
+        this.className= 'ShapeCorrectText';
+        this.isDrawing = false;
+	this.isCorrectBool = true;
+    	this.callback = callback;
+	this.unBindEvents();
+        this.bindEvents();
+    }
+	ShapeCorrectText.prototype.bindEvents = function() {
+		var inst = this;
+		
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	ShapeCorrectText.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
+	ShapeCorrectText.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+		//inst.unBindEvents();
+    		if (inst.callback) inst.callback();
+	};
+	
+	ShapeCorrectText.prototype.onMouseMove = function (o) {
+		var inst = this;
+
+
+		if(!inst.isEnable()){ return; }
+
+		console.log("mouse move ShapeCorrectText");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'purple',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
+
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
+
+    ShapeCorrectText.prototype.onMouseDown = function (o) {
+      var inst = this;
+      inst.enable();
+	    console.log('in ShapeCorrectText.prototype.onMouseDown with o: ',o);
+	    console.log('o.target: ',o.target);
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
+
+//TODO: change options in here based on active tool
+		console.log('inst.active_tool: ',inst.active_tool);
+		console.log('inst.canvas.active_tool: ',inst.canvas.active_tool);
+    	var rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x-origX,
+          height: pointer.y-origY,
+          angle: 0,
+          transparentCorners: false,
+          hasBorders: false,
+          hasControls: false
+      });
+	var newUUID = UUID.generate();
+	//newUUID = newUUID.toString();
+	console.log('newUUID: ',newUUID);
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+			return function() {
+				return fabric.util.object.extend(toObject.call(this), {
+					name: this.name,
+					tool:this.tool,
+					isCorrect: this.isCorrectBool
+				});
+			};
+	})(rect.toObject);
+	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	rect.tool = 'correctText';
+	rect.isCorrect = this.isCorrectBool;	
+	console.log('in ShapeCorrectText.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in ShapeCorrectText.prototype.onMouseDown with rect.name: ',rect.name);
+	console.log('in ShapeCorrectText.prototype.onMouseDown with rect.tool: ',rect.tool);
+  	inst.canvas.add(rect).setActiveObject(rect);
+      }
+    };
+
+    ShapeCorrectText.prototype.isEnable = function(){
+      return this.isDrawing;
+    }
+
+    ShapeCorrectText.prototype.enable = function(){
+      this.isDrawing = true;
+    }
+
+    ShapeCorrectText.prototype.disable = function(){
+      this.isDrawing = false;
+    }
+
+    return ShapeCorrectText;
+}());
+
+var ShapeCorrectMcOption = (function () {
+    function ShapeCorrectMcOption(canvas,callback) {
+        var inst=this;
+        this.canvas = canvas;
+        this.className= 'ShapeCorrectMcOption';
+        this.isDrawing = false;
+	this.isCorrectBool = true;
+    	this.callback = callback;
+	this.unBindEvents();
+        this.bindEvents();
+    }
+	ShapeCorrectMcOption.prototype.bindEvents = function() {
+		var inst = this;
+		
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	ShapeCorrectMcOption.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
+	ShapeCorrectMcOption.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+		//inst.unBindEvents();
+    		if (inst.callback) inst.callback();
+	};
+	
+	ShapeCorrectMcOption.prototype.onMouseMove = function (o) {
+		var inst = this;
+
+
+		if(!inst.isEnable()){ return; }
+
+		console.log("mouse move ShapeCorrectMcOption");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'purple',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
+
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
+
+    ShapeCorrectMcOption.prototype.onMouseDown = function (o) {
+      var inst = this;
+      inst.enable();
+	    console.log('in ShapeCorrectMcOption.prototype.onMouseDown with o: ',o);
+	    console.log('o.target: ',o.target);
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
+
+//TODO: change options in here based on active tool
+		console.log('inst.active_tool: ',inst.active_tool);
+		console.log('inst.canvas.active_tool: ',inst.canvas.active_tool);
+    	var rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x-origX,
+          height: pointer.y-origY,
+          angle: 0,
+          transparentCorners: false,
+          hasBorders: false,
+          hasControls: false
+      });
+	var newUUID = UUID.generate();
+	//newUUID = newUUID.toString();
+	console.log('newUUID: ',newUUID);
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+			return function() {
+				return fabric.util.object.extend(toObject.call(this), {
+					name: this.name,
+					tool:this.tool,
+					isCorrect: this.isCorrectBool
+				});
+			};
+	})(rect.toObject);
+	//console.log('in ShapeCorrectMcOption.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	rect.tool = 'correctMcOption';
+	rect.isCorrect = this.isCorrectBool;	
+	console.log('in ShapeCorrectMcOption.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in ShapeCorrectMcOption.prototype.onMouseDown with rect.name: ',rect.name);
+	console.log('in ShapeCorrectMcOption.prototype.onMouseDown with rect.tool: ',rect.tool);
+  	inst.canvas.add(rect).setActiveObject(rect);
+      }
+    };
+
+    ShapeCorrectMcOption.prototype.isEnable = function(){
+      return this.isDrawing;
+    }
+
+    ShapeCorrectMcOption.prototype.enable = function(){
+      this.isDrawing = true;
+    }
+
+    ShapeCorrectMcOption.prototype.disable = function(){
+      this.isDrawing = false;
+    }
+
+    return ShapeCorrectMcOption;
+}());
+
 PDFAnnotate.prototype.enableAreaSelector = function () {
 	var inst = this;
 	inst.active_tool = 0;
@@ -544,6 +852,34 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 		    //like arrow
 		    new Shape(fabricObj, function () {
 	            inst.active_tool = 0;
+	        });
+	    });
+	}
+}
+
+PDFAnnotate.prototype.enableCorrectTextOptionSelector = function () {
+	var inst = this;
+	inst.active_tool = 4;
+	if (inst.fabricObjects.length > 0) {
+	    $.each(inst.fabricObjects, function (index, fabricObj) {
+	        fabricObj.isDrawingMode = false;
+		    //like arrow
+		    new ShapeCorrectText(fabricObj, function () {
+	            inst.active_tool = 4;
+	        });
+	    });
+	}
+}
+
+PDFAnnotate.prototype.enableCorrectMcOptionSelector = function () {
+	var inst = this;
+	inst.active_tool = 5;
+	if (inst.fabricObjects.length > 0) {
+	    $.each(inst.fabricObjects, function (index, fabricObj) {
+	        fabricObj.isDrawingMode = false;
+		    //like arrow
+		    new ShapeCorrectMcOption(fabricObj, function () {
+	            inst.active_tool = 4;
 	        });
 	    });
 	}
@@ -642,6 +978,15 @@ PDFAnnotate.prototype.deleteSelectedObject = function () {
 		    inst.fabricObjects[inst.active_canvas].discardActiveObject();
     		    inst.fabricObjects[inst.active_canvas].renderAll();
 	    }
+	}
+}
+
+PDFAnnotate.prototype.enableSelectedObjectAsCorrectAnswer = function () {
+	var inst = this;
+	var activeObject = inst.fabricObjects[inst.active_canvas].getActiveObject();
+	if (activeObject)
+	{
+	    inst.fabricObjects[inst.active_canvas].isCorrectBool = true;
 	}
 }
 
