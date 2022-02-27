@@ -282,7 +282,6 @@ var ShapeImage = (function () {
         this.className= 'ShapeImage';
         this.isDrawing = false;
     	this.callback = callback;
-	   
 	this.unBindEvents();
         this.bindEvents();
     }
@@ -399,15 +398,18 @@ var ShapeImage = (function () {
 				return fabric.util.object.extend(toObject.call(this), {
 					name: this.name,
 					tool:this.tool,
-					isCorrect: this.isCorrectBool
+					isCorrect: this.isCorrectBool,
+					questionIndex: this.questionIndex
 				});
 			};
 	})(rect.toObject);
 	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = newUUID;
-	rect.tool = 'imageInsert';
+	rect.tool = 'embeddedImageInsert';
+	rect.questionIndex = this.canvas.questionIndex;
 	rect.isCorrect = this.isCorrectBool;	
 	console.log('in ShapeImage.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in ShapeImage.prototype.onMouseDown with rect.questionIndex: ',rect.questionIndex);
 	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
 	console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
   	inst.canvas.add(rect).setActiveObject(rect);
@@ -849,6 +851,7 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
+		    
 		    //like arrow
 		    new Shape(fabricObj, function () {
 	            inst.active_tool = 0;
@@ -885,14 +888,16 @@ PDFAnnotate.prototype.enableCorrectMcOptionSelector = function () {
 	}
 }
 
-PDFAnnotate.prototype.enableImageSelector = function () {
+PDFAnnotate.prototype.enableImageSelector = function (questionIndex) {
 	var inst = this;
 	inst.active_tool = 1;
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
-		    //like arrow
-		    new ShapeImage(fabricObj, function () {
+		//tell which question is selected
+		fabricObj.questionIndex = questionIndex;
+		    
+		new ShapeImage(fabricObj, function () {
 	            inst.active_tool = 1;
 	        });
 	    });
