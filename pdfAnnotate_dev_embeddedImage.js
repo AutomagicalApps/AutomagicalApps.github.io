@@ -879,7 +879,7 @@ PDFAnnotate.prototype.enableCorrectMcOptionSelector = function () {
 	        fabricObj.isDrawingMode = false;
 		    //like arrow
 		    new ShapeCorrectMcOption(fabricObj, function () {
-	            inst.active_tool = 4;
+	            inst.active_tool = 5;
 	        });
 	    });
 	}
