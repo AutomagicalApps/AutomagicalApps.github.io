@@ -896,9 +896,8 @@ PDFAnnotate.prototype.enableImageSelector = function (questionIndex) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
 		//tell which question is selected
-		fabricObj.questionIndex = questionIndex;
 		    
-		new ShapeImage(fabricObj, function () {
+		new ShapeImage(questionIndex,fabricObj, function () {
 	            inst.active_tool = 1;
 	        });
 	    });
