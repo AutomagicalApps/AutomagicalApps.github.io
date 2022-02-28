@@ -43,6 +43,7 @@ var PDFAnnotate = function(container_id, url, selectBool, options = {}) {
 	this.selectBool = selectBool;
 	this.isCorrectBool = false;
 	var inst = this;
+	this.questionIndex = 0; //initial set for select dropdown
 	
 	
 
@@ -276,10 +277,9 @@ var Shape = (function () {
 
 
 var ShapeImage = (function () {
-    function ShapeImage(questionIndex,canvas,callback) {
+    function ShapeImage(canvas,callback) {
         var inst=this;
         this.canvas = canvas;
-	this.questionIndex = questionIndex;
         this.className= 'ShapeImage';
         this.isDrawing = false;
     	this.callback = callback;
@@ -889,15 +889,14 @@ PDFAnnotate.prototype.enableCorrectMcOptionSelector = function () {
 	}
 }
 
-PDFAnnotate.prototype.enableImageSelector = function (questionIndex) {
+PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
-		//tell which question is selected
-		    
-		new ShapeImage(questionIndex,fabricObj, function () {
+		
+		new ShapeImage(fabricObj, function () {
 	            inst.active_tool = 1;
 	        });
 	    });
@@ -1034,6 +1033,11 @@ PDFAnnotate.prototype.setFontSize = function (size) {
 
 PDFAnnotate.prototype.setBorderSize = function (size) {
 	this.borderSize = size;
+}
+
+
+PDFAnnotate.prototype.setQuestionIndex = function (questionIndex) {
+	this.questionIndex = questionIndex;
 }
 
 PDFAnnotate.prototype.clearActivePage = function () {
