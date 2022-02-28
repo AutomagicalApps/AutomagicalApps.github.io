@@ -277,7 +277,7 @@ var Shape = (function () {
 
 
 var ShapeImage = (function () {
-    function ShapeImage(canvas,callback) {
+    function ShapeImage(questionIndex,canvas,callback) {
         var inst=this;
         this.canvas = canvas;
         this.className= 'ShapeImage';
@@ -285,6 +285,8 @@ var ShapeImage = (function () {
     	this.callback = callback;
 	this.unBindEvents();
         this.bindEvents();
+	this.questionIndex = questionIndex;
+	 
     }
 	ShapeImage.prototype.bindEvents = function() {
 		var inst = this;
@@ -892,11 +894,12 @@ PDFAnnotate.prototype.enableCorrectMcOptionSelector = function () {
 PDFAnnotate.prototype.enableImageSelector = function () {
 	var inst = this;
 	inst.active_tool = 1;
+	console.log('inst.questionIndex in the prototype.enableImageSelector cascading down from PDFAnnotate: ',inst.questionIndex);
 	if (inst.fabricObjects.length > 0) {
 	    $.each(inst.fabricObjects, function (index, fabricObj) {
 	        fabricObj.isDrawingMode = false;
-		
-		new ShapeImage(fabricObj, function () {
+		var questionIndex = inst.questionIndex;
+		new ShapeImage(questionIndex, fabricObj, function () {
 	            inst.active_tool = 1;
 	        });
 	    });
@@ -1037,6 +1040,7 @@ PDFAnnotate.prototype.setBorderSize = function (size) {
 
 
 PDFAnnotate.prototype.setQuestionIndex = function (questionIndex) {
+	console.log('in setQuestionIndex with questionIndex: ',questionIndex);
 	this.questionIndex = questionIndex;
 }
 
