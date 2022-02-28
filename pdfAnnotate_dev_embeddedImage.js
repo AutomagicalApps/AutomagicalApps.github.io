@@ -276,9 +276,10 @@ var Shape = (function () {
 
 
 var ShapeImage = (function () {
-    function ShapeImage(canvas,callback) {
+    function ShapeImage(questionIndex,canvas,callback) {
         var inst=this;
         this.canvas = canvas;
+	this.questionIndex = questionIndex;
         this.className= 'ShapeImage';
         this.isDrawing = false;
     	this.callback = callback;
@@ -406,7 +407,7 @@ var ShapeImage = (function () {
 	//console.log('in ShapeImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
 	rect.name = newUUID;
 	rect.tool = 'embeddedImageInsert';
-	rect.questionIndex = this.canvas.questionIndex;
+	rect.questionIndex = this.questionIndex;
 	rect.isCorrect = this.isCorrectBool;	
 	console.log('in ShapeImage.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
 	console.log('in ShapeImage.prototype.onMouseDown with rect.questionIndex: ',rect.questionIndex);
