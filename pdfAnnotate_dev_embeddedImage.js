@@ -434,6 +434,164 @@ var ShapeImage = (function () {
     return ShapeImage;
 }());
 
+var AreaImage = (function () {
+    function AreaImage(questionIndex,canvas,toolName,callback) {
+        var inst=this;
+        this.canvas = canvas;
+        this.className= 'ShapeImage';
+        this.isDrawing = false;
+    	this.callback = callback;
+	this.unBindEvents();
+        this.bindEvents();
+	this.questionIndex = questionIndex;
+	    this.toolName = toolName;
+	 
+    }
+	AreaImage.prototype.bindEvents = function() {
+		var inst = this;
+		console.log('inst.active_tool in bindEvents: ',inst.active_tool);
+		console.log('inst.canvas.active_tool in bindEvents: ',inst.canvas.active_tool);
+		inst.canvas.on('mouse:down', function(o) {
+			inst.onMouseDown(o);
+		});
+		inst.canvas.on('mouse:move', function(o) {
+			inst.onMouseMove(o);
+		});
+		inst.canvas.on('mouse:up', function(o) {
+			inst.onMouseUp(o);
+		});
+		inst.canvas.on('object:moving', function(o) {
+			inst.disable();
+		})
+	}
+	AreaImage.prototype.unBindEvents = function () {
+	    var inst = this;
+	    inst.canvas.off('mouse:down');
+	    inst.canvas.off('mouse:up');
+	    inst.canvas.off('mouse:move');
+	    inst.canvas.off('object:moving');
+	  }
+	
+	AreaImage.prototype.onMouseUp = function (o) {
+		var inst = this;
+		inst.disable();
+		//inst.unBindEvents();
+    		if (inst.callback) inst.callback();
+	};
+	
+	AreaImage.prototype.onMouseMove = function (o) {
+		var inst = this;
+
+
+		if(!inst.isEnable()){ return; }
+
+		console.log("mouse move AreaImage");
+		var pointer = inst.canvas.getPointer(o.e);
+		var activeObj = inst.canvas.getActiveObject();
+		console.log('activeObj: ',activeObj);
+		activeObj.stroke= 'blue',
+		activeObj.strokeWidth= 1;
+		//activeObj.fill = 'rgba(255, 0, 0, 0.3)';
+		activeObj.fill = 'transparent';
+		    //see if the object has a name
+		console.log('activeObj.name: ',activeObj.name); 
+		if(origX > pointer.x){
+		  activeObj.set({ left: Math.abs(pointer.x) }); 
+		}
+		if(origY > pointer.y){
+		  activeObj.set({ top: Math.abs(pointer.y) });
+		}
+
+		activeObj.set({ width: Math.abs(origX - pointer.x) });
+		activeObj.set({ height: Math.abs(origY - pointer.y) });
+		//var objectId = UUID.generate();
+		//activeObj.set({ id: UUID.generate() });
+		activeObj.setCoords();
+		inst.canvas.renderAll();
+	};
+
+    AreaImage.prototype.onMouseDown = function (o) {
+      var inst = this;
+      inst.enable();
+	    console.log('in AreaImage.prototype.onMouseDown with o: ',o);
+	    console.log('o.target: ',o.target);
+ 	//if target, don't create a new rect
+     	if(o.target==null){
+      	var pointer = inst.canvas.getPointer(o.e);
+      	origX = pointer.x;
+      	origY = pointer.y;
+
+    	var rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x-origX,
+          height: pointer.y-origY,
+          angle: 0,
+          transparentCorners: false,
+          hasBorders: false,
+          hasControls: false
+      });
+	var newUUID = UUID.generate();
+	//newUUID = newUUID.toString();
+	console.log('newUUID: ',newUUID);
+		
+	/*
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+  			return function() {
+    				return fabric.util.object.extend(toObject.call(this), {
+      				name: this.name,
+					tool:this.tool
+    				});
+  			};
+	})(rect.toObject);
+	//console.log('in AreaImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	     rect.tool = 'imageInsert';
+	console.log('in ShapeImage.prototype.onMouseDown with rect.name: ',rect.name);
+	     console.log('in ShapeImage.prototype.onMouseDown with rect.tool: ',rect.tool);
+	*/
+		
+	//add custom property as per here: http://fabricjs.com/fabric-intro-part-3
+	rect.toObject = (function(toObject) {
+			return function() {
+				return fabric.util.object.extend(toObject.call(this), {
+					name: this.name,
+					tool:this.tool,
+					isCorrect: this.isCorrectBool,
+					questionIndex: this.questionIndex
+				});
+			};
+	})(rect.toObject);
+	//console.log('in AreaImage.prototype.onMouseDown with rect.name before setting to .objectId: ',rect.name);
+	rect.name = newUUID;
+	rect.tool = this.toolName;
+	rect.questionIndex = this.questionIndex;
+	rect.isCorrect = this.isCorrectBool;	
+	console.log('in AreaImage.prototype.onMouseDown with rect.isCorrectBool: ',rect.isCorrect);
+	console.log('in AreaImage.prototype.onMouseDown with rect.questionIndex: ',rect.questionIndex);
+	console.log('in AreaImage.prototype.onMouseDown with rect.name: ',rect.name);
+	console.log('in AreaImage.prototype.onMouseDown with rect.tool: ',rect.tool);
+  	inst.canvas.add(rect).setActiveObject(rect);
+      }
+    };
+
+    AreaImage.prototype.isEnable = function(){
+      return this.isDrawing;
+    }
+
+    AreaImage.prototype.enable = function(){
+      this.isDrawing = true;
+    }
+
+    AreaImage.prototype.disable = function(){
+      this.isDrawing = false;
+    }
+
+    return AreaImage;
+}());
 
 var ShapeAutomagical = (function () {
     function ShapeAutomagical(canvas,callback) {
@@ -863,6 +1021,7 @@ PDFAnnotate.prototype.enableAreaSelector = function () {
 	}
 }
 
+
 PDFAnnotate.prototype.enableCorrectTextOptionSelector = function () {
 	var inst = this;
 	inst.active_tool = 4;
@@ -900,6 +1059,21 @@ PDFAnnotate.prototype.enableImageSelector = function () {
 	        fabricObj.isDrawingMode = false;
 		var questionIndex = inst.questionIndex;
 		new ShapeImage(questionIndex, fabricObj, function () {
+	            inst.active_tool = 1;
+	        });
+	    });
+	}
+}
+//try to build a higher level function that works for all tools
+PDFAnnotate.prototype.areaImageSelector = function (toolName) {
+	var inst = this;
+	inst.active_tool = 1;
+	console.log('inst.questionIndex in the prototype.enableImageSelector cascading down from PDFAnnotate: ',inst.questionIndex);
+	if (inst.fabricObjects.length > 0) {
+	    $.each(inst.fabricObjects, function (index, fabricObj) {
+	        fabricObj.isDrawingMode = false;
+		var questionIndex = inst.questionIndex;
+		new AreaImage(questionIndex, fabricObj,toolName, function () {
 	            inst.active_tool = 1;
 	        });
 	    });
